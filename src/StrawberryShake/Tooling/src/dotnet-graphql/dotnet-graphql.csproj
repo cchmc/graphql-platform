@@ -6,12 +6,13 @@
     <PackAsTool>true</PackAsTool>
     <NoWarn>$(NoWarn);CA1062</NoWarn>
     <UseAppHost>false</UseAppHost>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>StrawberryShake.Tools</PackageId>
+    <PackageId>StrawberryShake.Local.Tools</PackageId>
     <AssemblyName>dotnet-graphql</AssemblyName>
-    <RootNamespace>StrawberryShake.Tools</RootNamespace>
+    <RootNamespace>StrawberryShake.Tools</RootNamespace><Version>15.1.4-cchmc-1.3</Version>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace StrawberryShake;
 
 public partial class OperationExecutor<TData, TResult>
@@ -113,8 +115,14 @@ public partial class OperationExecutor<TData, TResult>
                     TrySubscribeObserverSessionToStore(observer, session);
                 }
             }
+            catch (ObjectDisposedException odex){
+                Debug.WriteLine($"--------------->>>> IGNORING ObjectDisposedException <<<<---------------\n in {nameof(OperationExecutorObservable)} {odex.Message}");
+                // If the observer has unsubscribed, we will get an exception when we try to
+                // notify it. We will just ignore this exception.???????
+            }
             catch (Exception ex)
             {
+                Debug.WriteLine($"Exception in {nameof(OperationExecutorObservable)} {ex.Message}");
                 observer.OnError(ex);
             }
             finally

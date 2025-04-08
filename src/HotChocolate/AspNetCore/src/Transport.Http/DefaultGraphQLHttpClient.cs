@@ -67,7 +67,7 @@ public sealed class DefaultGraphQLHttpClient : GraphQLHttpClient
     /// <paramref name="request"/> has no <see cref="GraphQLHttpRequest.Uri"/> and the underlying
     /// HTTP client has no <see cref="HttpClient.BaseAddress"/>.
     /// </exception>
-    public override Task<GraphQLHttpResponse> SendAsync(
+    public override async Task<GraphQLHttpResponse> SendAsync(
         GraphQLHttpRequest request,
         CancellationToken cancellationToken = default)
     {
@@ -84,7 +84,7 @@ public sealed class DefaultGraphQLHttpClient : GraphQLHttpClient
         }
 
         var requestUri = request.Uri ?? _http.BaseAddress!;
-        return ExecuteInternalAsync(request, requestUri, cancellationToken);
+        return await ExecuteInternalAsync(request, requestUri, cancellationToken);
     }
 
     private async Task<GraphQLHttpResponse> ExecuteInternalAsync(

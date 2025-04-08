@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace StrawberryShake;
 
 public partial class StorelessOperationExecutor<TData, TResult>
@@ -52,8 +54,15 @@ public partial class StorelessOperationExecutor<TData, TResult>
                     observer.OnNext(resultBuilder.Build(response));
                 }
             }
+            catch(ObjectDisposedException odex)
+            {
+                Debug.WriteLine($"--------------->>>> IGNORING ObjectDisposedException <<<<---------------\n in {nameof(StorelessOperationExecutorObservable)} {odex.Message}");
+                // If the  has unsubscribed, we will get an exception when we try to
+                // notify it. We will just ignore this exception.???????
+            }
             catch (Exception ex)
             {
+                Debug.WriteLine($"Exception in {nameof(StorelessOperationExecutorObservable)} {ex.Message}");
                 observer.OnError(ex);
             }
             finally
