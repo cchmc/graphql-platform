@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>HotChocolate.Templates</id>
-    <version>15.1.4-cchmc-1.3</version>
+    <version>15.1.4-cchmc-1.8</version>
     <description>Hot Chocolate GraphQL templates.</description>
     <authors>Michael Staib</authors>
     <iconUrl>https://chillicream.com/resources/hotchocolate-signet.png</iconUrl>
