@@ -12,18 +12,7 @@ internal class RequestSession : IDisposable
         _cts = new CancellationTokenSource();
     }
 
-    public CancellationToken Abort
-    {
-        get
-        {
-            if (_disposed)
-            {
-                Debug.WriteLine("----------->>>> RequestSession is disposed on obtaining the token through Abort. <<<<-----------");
-                throw new ObjectDisposedException(nameof(RequestSession));
-            }
-            return _cts.Token;
-        }
-    }
+    public CancellationToken Abort => _cts.Token;
 
     public void Cancel()
     {

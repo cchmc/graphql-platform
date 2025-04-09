@@ -55,7 +55,7 @@ public partial class OperationExecutor<TData, TResult>
             IObserver<IOperationResult<TResult>> observer,
             IOperationResult<TResult>? lastEmittedResult)
         {
-            var observerSession = new ObserverSession();
+            using var observerSession = new ObserverSession();
             Task.Run(() => ExecuteAsync(observer, observerSession, lastEmittedResult));
             return observerSession;
         }
@@ -116,9 +116,10 @@ public partial class OperationExecutor<TData, TResult>
                 }
             }
             catch (ObjectDisposedException odex){
-                Debug.WriteLine($"--------------->>>> IGNORING ObjectDisposedException <<<<---------------\n in {nameof(OperationExecutorObservable)} {odex.Message}");
+                Debug.WriteLine($"--------------->>>> ObjectDisposedException in {nameof(OperationExecutorObservable)} <<<<---------------\n{odex.Message}");
                 // If the observer has unsubscribed, we will get an exception when we try to
                 // notify it. We will just ignore this exception.???????
+                observer.OnError(odex);
             }
             catch (Exception ex)
             {

@@ -56,9 +56,10 @@ public partial class StorelessOperationExecutor<TData, TResult>
             }
             catch(ObjectDisposedException odex)
             {
-                Debug.WriteLine($"--------------->>>> IGNORING ObjectDisposedException <<<<---------------\n in {nameof(StorelessOperationExecutorObservable)} {odex.Message}");
+                Debug.WriteLine($"--------------->>>> ObjectDisposedException in {nameof(StorelessOperationExecutorObservable)} <<<<---------------\n{odex.Message}");
                 // If the  has unsubscribed, we will get an exception when we try to
                 // notify it. We will just ignore this exception.???????
+                observer.OnError(odex);
             }
             catch (Exception ex)
             {
