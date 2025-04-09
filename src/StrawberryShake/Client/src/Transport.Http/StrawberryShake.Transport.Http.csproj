@@ -4,7 +4,6 @@
     <PackageId>StrawberryShake.Transport.Http</PackageId>
     <AssemblyName>StrawberryShake.Transport.Http</AssemblyName>
     <RootNamespace>StrawberryShake.Transport.Http</RootNamespace>
-    <Version>15.1.4-cchmc-1.3</Version>
     <Description>GraphQL over HTTP transport implementation for StrawberryShake GraphQL clients.</Description>
   </PropertyGroup>
 

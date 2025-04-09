@@ -4,7 +4,6 @@
     <PackageId>StrawberryShake.Core</PackageId>
     <AssemblyName>StrawberryShake.Core</AssemblyName>
     <RootNamespace>StrawberryShake</RootNamespace>
-    <Version>15.1.4-cchmc-1.3</Version>
     <Description>Abstractions and foundational APIs for StrawberryShake GraphQL clients.</Description>
   </PropertyGroup>
 
