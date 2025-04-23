@@ -1,5 +1,5 @@
 // ReSharper disable IntroduceOptionalParameters.Global
-
+using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -67,7 +67,7 @@ public sealed class DefaultGraphQLHttpClient : GraphQLHttpClient
     /// <paramref name="request"/> has no <see cref="GraphQLHttpRequest.Uri"/> and the underlying
     /// HTTP client has no <see cref="HttpClient.BaseAddress"/>.
     /// </exception>
-    public override Task<GraphQLHttpResponse> SendAsync(
+    public override async Task<GraphQLHttpResponse> SendAsync(
         GraphQLHttpRequest request,
         CancellationToken cancellationToken = default)
     {
@@ -84,7 +84,7 @@ public sealed class DefaultGraphQLHttpClient : GraphQLHttpClient
         }
 
         var requestUri = request.Uri ?? _http.BaseAddress!;
-        return ExecuteInternalAsync(request, requestUri, cancellationToken);
+        return await ExecuteInternalAsync(request, requestUri, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<GraphQLHttpResponse> ExecuteInternalAsync(
@@ -100,10 +100,27 @@ public sealed class DefaultGraphQLHttpClient : GraphQLHttpClient
         using var requestMessage = CreateRequestMessage(arrayWriter, request, requestUri);
         requestMessage.Version = _http.DefaultRequestVersion;
         requestMessage.VersionPolicy = _http.DefaultVersionPolicy;
-        var responseMessage = await _http
-            .SendAsync(requestMessage, ResponseHeadersRead, ct)
-            .ConfigureAwait(false);
-        return new GraphQLHttpResponse(responseMessage);
+        try
+        {
+            Debug.WriteLine($"{1}", request.ToString());
+            var responseMessage = await _http
+                .SendAsync(requestMessage, ResponseHeadersRead, ct)
+                .ConfigureAwait(false);
+
+            return new GraphQLHttpResponse(responseMessage);
+        }
+        catch (TaskCanceledException tcex)
+        {
+            // foreach (var graphvar in request.)
+            // {
+            //     Debug.WriteLine(graphvar);
+            // }
+            Debug.WriteLine($"{1}", tcex.Message);
+            return new GraphQLHttpResponse(new HttpResponseMessage()
+            {
+
+            });
+        }
     }
 
     private static HttpRequestMessage CreateRequestMessage(
@@ -113,7 +130,7 @@ public sealed class DefaultGraphQLHttpClient : GraphQLHttpClient
     {
         var method = request.Method;
 
-        if(method == GraphQLHttpMethod.Get)
+        if (method == GraphQLHttpMethod.Get)
         {
             if (request.Body is not OperationRequest)
             {
@@ -237,7 +254,7 @@ public sealed class DefaultGraphQLHttpClient : GraphQLHttpClient
         Uri baseAddress,
         IRequestBody body)
     {
-        if(body is not OperationRequest or)
+        if (body is not OperationRequest or)
         {
             throw new InvalidOperationException(
                 HttpResources.DefaultGraphQLHttpClient_BatchNotAllowed);
